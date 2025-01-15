@@ -79,11 +79,12 @@ def drawScene():
     drawCone(0, -5)
     drawCone(0, 5)
 
+    #Car Parts
     #x,y,z -- width,height,depth
     #bottom part
     drawCuboid(-5, 5, -50, 10, 5, 5)
     #top part
-    drawCuboid(-5, 10, -50, 5, 5, 5)
+    drawCuboid(-5, 10, -50, 4, 3, 5)
 
     #x,y,z -- base-rad,top-rad,height,slices,stacks 
     #back right wheel
@@ -94,8 +95,6 @@ def drawScene():
     drawCylinder(-5, 5, -45, 2, 2, 2, 36, 5)
     #front left wheel
     drawCylinder(5, 5, -45, 2, 2, 2, 36, 5)
-
-    #drawRectangle(0, 5, -10, 5, 5)
 
 def drawCone(x,z):
     quad = gluNewQuadric()
@@ -116,7 +115,7 @@ def drawCylinder(x, y, z, base_radius, top_radius, height, slices, stacks):
     
     # Draw the base
     glPushMatrix()
-    glRotatef(180, 1, 0, 0)
+    glRotatef(0, 1, 0, 0)
     gluDisk(quad, 0, base_radius, slices, stacks)
     glPopMatrix()
     
