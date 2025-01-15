@@ -25,7 +25,7 @@ def main():
     return
 
 def init():
-    global clock, camera
+    global clock, camera, running
     pygame.init()
     screen = pygame.display.set_mode(window_dimensions, pygame.DOUBLEBUF|pygame.OPENGL)
     clock = pygame.time.Clock()
@@ -79,6 +79,24 @@ def drawScene():
     drawCone(0, -5)
     drawCone(0, 5)
 
+    #x,y,z -- width,height,depth
+    #bottom part
+    drawCuboid(-5, 5, -50, 10, 5, 5)
+    #top part
+    drawCuboid(-5, 10, -50, 5, 5, 5)
+
+    #x,y,z -- base-rad,top-rad,height,slices,stacks 
+    #back right wheel
+    drawCylinder(-5, 5, -40, 2, 2, 2, 36, 5)
+    #front right wheel
+    drawCylinder(5, 5, -40, 2, 2, 2, 36, 5)
+    #back left wheel
+    drawCylinder(-5, 5, -45, 2, 2, 2, 36, 5)
+    #front left wheel
+    drawCylinder(5, 5, -45, 2, 2, 2, 36, 5)
+
+    #drawRectangle(0, 5, -10, 5, 5)
+
 def drawCone(x,z):
     quad = gluNewQuadric()
     glPushMatrix()
@@ -88,6 +106,84 @@ def drawCone(x,z):
 
     gluDeleteQuadric(quad)
 
+def drawCylinder(x, y, z, base_radius, top_radius, height, slices, stacks):
+    quad = gluNewQuadric()
+    glPushMatrix()
+    glTranslate(x, y, z)
+    
+    # Draw the cylinder
+    gluCylinder(quad, base_radius, top_radius, height, slices, stacks)
+    
+    # Draw the base
+    glPushMatrix()
+    glRotatef(180, 1, 0, 0)
+    gluDisk(quad, 0, base_radius, slices, stacks)
+    glPopMatrix()
+    
+    # Draw the top
+    glTranslate(0, 0, height)
+    gluDisk(quad, 0, top_radius, slices, stacks)
+    
+    glPopMatrix()
+    gluDeleteQuadric(quad)
+
+def drawRectangle(x, y, z, width, height):
+    glPushMatrix()
+    glTranslate(x, y, z)
+    glBegin(GL_QUADS)
+    
+    # Rectangle face
+    glVertex3f(0.0, 0.0, 0.0)
+    glVertex3f(width, 0.0, 0.0)
+    glVertex3f(width, height, 0.0)
+    glVertex3f(0.0, height, 0.0)
+
+    glEnd()
+    glPopMatrix()
+
+def drawCuboid(x, y, z, width, height, depth):
+    glPushMatrix()
+    glTranslate(x, y, z)
+    glBegin(GL_QUADS)
+    
+    # Front face
+    glVertex3f(0.0, 0.0, 0.0)
+    glVertex3f(width, 0.0, 0.0)
+    glVertex3f(width, height, 0.0)
+    glVertex3f(0.0, height, 0.0)
+    
+    # Back face
+    glVertex3f(0.0, 0.0, depth)
+    glVertex3f(width, 0.0, depth)
+    glVertex3f(width, height, depth)
+    glVertex3f(0.0, height, depth)
+    
+    # Top face
+    glVertex3f(0.0, height, 0.0)
+    glVertex3f(width, height, 0.0)
+    glVertex3f(width, height, depth)
+    glVertex3f(0.0, height, depth)
+    
+    # Bottom face
+    glVertex3f(0.0, 0.0, 0.0)
+    glVertex3f(width, 0.0, 0.0)
+    glVertex3f(width, 0.0, depth)
+    glVertex3f(0.0, 0.0, depth)
+    
+    # Left face
+    glVertex3f(0.0, 0.0, 0.0)
+    glVertex3f(0.0, height, 0.0)
+    glVertex3f(0.0, height, depth)
+    glVertex3f(0.0, 0.0, depth)
+    
+    # Right face
+    glVertex3f(width, 0.0, 0.0)
+    glVertex3f(width, height, 0.0)
+    glVertex3f(width, height, depth)
+    glVertex3f(width, 0.0, depth)
+    
+    glEnd()
+    glPopMatrix()
 
 def keyboard(event):
     global camera, running
